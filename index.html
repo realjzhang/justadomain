@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>eTowne — Precision Financial Software Engineering</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-bg: #F8F7F4;
+      --color-bg-alt: #EFEDE8;
+      --color-bg-card: #FFFFFF;
+      --color-text: #1A1A1A;
+      --color-text-secondary: #5A5A5A;
+      --color-text-muted: #8A8A8A;
+      --color-accent: #0B3D2E;
+      --color-accent-light: #1A6B4A;
+      --color-accent-glow: #2ED89C;
+      --color-gold: #C49A2A;
+      --color-gold-light: #E8C95A;
+      --color-border: #E0DED8;
+      --color-border-light: #EDEAE4;
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body: 'Outfit', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 1rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(248, 247, 244, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--color-border-light);
+      transition: all 0.3s ease;
+    }
+
+    .nav-logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--color-accent); }
+
+    .nav-cta {
+      display: inline-block;
+      padding: 0.6rem 1.5rem;
+      background: var(--color-accent);
+      color: #fff !important;
+      border-radius: 6px;
+      font-size: 0.8rem !important;
+      letter-spacing: 0.06em !important;
+      transition: background 0.3s, transform 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--color-accent-light); transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(11,61,46,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(11,61,46,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent);
+      -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent);
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: -20%; right: -10%;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(46,216,156,0.08), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content { max-width: 900px; position: relative; z-index: 1; }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-accent-light);
+      background: rgba(11,61,46,0.06);
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 2rem;
+      letter-spacing: 0.05em;
+      animation: fadeUp 0.8s ease both;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--color-accent-glow);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--color-text);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s 0.1s ease both;
+    }
+    .hero h1 em { font-style: italic; color: var(--color-accent); }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--color-text-secondary);
+      max-width: 560px;
+      line-height: 1.7;
+      font-weight: 300;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 2rem;
+      background: var(--color-accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .btn-primary:hover { background: var(--color-accent-light); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(11,61,46,0.15); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 2rem;
+      background: transparent;
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .btn-secondary:hover { border-color: var(--color-accent); color: var(--color-accent); transform: translateY(-2px); }
+
+    /* ── TICKER STRIP ── */
+    .ticker-strip {
+      padding: 1rem 0;
+      border-top: 1px solid var(--color-border-light);
+      border-bottom: 1px solid var(--color-border-light);
+      background: var(--color-bg-alt);
+      overflow: hidden;
+    }
+    .ticker-track {
+      display: flex;
+      gap: 3rem;
+      animation: tickerScroll 25s linear infinite;
+      width: max-content;
+    }
+    .ticker-item {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      letter-spacing: 0.04em;
+    }
+
+    @keyframes tickerScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 6rem 3rem; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-gold);
+      margin-bottom: 1rem;
+    }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.15;
+      letter-spacing: -0.015em;
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--color-text-secondary);
+      max-width: 550px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* ── ABOUT ── */
+    .about { background: var(--color-bg); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-top: 3rem;
+    }
+
+    .about-text p {
+      color: var(--color-text-secondary);
+      line-height: 1.85;
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+      font-size: 1.02rem;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-light);
+      border-radius: 12px;
+      padding: 1.8rem;
+      transition: all 0.35s;
+    }
+    .stat-card:hover { border-color: var(--color-accent); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.05); }
+
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      color: var(--color-accent);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      letter-spacing: 0.03em;
+      font-weight: 400;
+    }
+
+    .firms-strip {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--color-border-light);
+    }
+    .firms-strip > p {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text-muted);
+      margin-bottom: 1.25rem;
+    }
+    .firm-logos {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .firm-logo-item {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.65rem 1.2rem;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      background: var(--color-bg-card);
+      transition: all 0.25s;
+      height: 48px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      letter-spacing: 0.03em;
+    }
+    .firm-logo-item:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+      transform: translateY(-2px);
+    }
+
+    /* ── SERVICES ── */
+    .services { background: var(--color-bg-alt); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .service-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-light);
+      border-radius: 14px;
+      padding: 2.5rem 2rem;
+      transition: all 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--color-accent), var(--color-accent-glow));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-card:hover { transform: translateY(-5px); box-shadow: 0 20px 60px rgba(0,0,0,0.06); }
+
+    .service-icon {
+      width: 48px; height: 48px;
+      background: rgba(11,61,46,0.06);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .service-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+    .service-card p {
+      font-size: 0.92rem;
+      color: var(--color-text-secondary);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .service-tags {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .service-tags span {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.04em;
+      color: var(--color-accent-light);
+      background: rgba(11,61,46,0.05);
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+    }
+
+    /* ── PROCESS ── */
+    .process { background: var(--color-bg); }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .step { position: relative; padding: 2rem 1.5rem; }
+    .step::before {
+      content: '';
+      position: absolute;
+      top: 2.8rem; right: -1rem;
+      width: calc(100% - 2rem);
+      height: 1px;
+      background: var(--color-border);
+    }
+    .step:last-child::before { display: none; }
+
+    .step-num {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--color-gold);
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+    }
+    .step h4 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      margin-bottom: 0.6rem;
+    }
+    .step p {
+      font-size: 0.88rem;
+      color: var(--color-text-secondary);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* ── TECHNOLOGY ── */
+    .technology { background: var(--color-bg-alt); }
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+    .tech-item {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-light);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .tech-item:hover { border-color: var(--color-accent); transform: translateY(-2px); }
+    .tech-item .tech-name {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--color-text);
+      margin-bottom: 0.25rem;
+    }
+    .tech-item .tech-desc {
+      font-size: 0.72rem;
+      color: var(--color-text-muted);
+    }
+
+    /* ── CLIENTS ── */
+    .clients { background: var(--color-bg); }
+    .client-types {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .client-card {
+      border: 1px solid var(--color-border);
+      border-radius: 14px;
+      padding: 2.5rem 2rem;
+      background: var(--color-bg-card);
+      transition: all 0.35s;
+    }
+    .client-card:hover { border-color: var(--color-gold); transform: translateY(-3px); box-shadow: 0 15px 50px rgba(0,0,0,0.05); }
+    .client-card h4 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+    }
+    .client-card p {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .client-card ul {
+      margin-top: 1rem;
+      list-style: none;
+      padding: 0;
+    }
+    .client-card ul li {
+      font-size: 0.82rem;
+      color: var(--color-text-secondary);
+      padding: 0.35rem 0;
+      border-bottom: 1px solid var(--color-border-light);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .client-card ul li:last-child { border-bottom: none; }
+    .client-card ul li::before {
+      content: '\2192';
+      color: var(--color-accent-glow);
+      font-size: 0.75rem;
+    }
+
+    /* ── CTA BANNER ── */
+    .cta-banner {
+      background: var(--color-accent);
+      padding: 5rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .cta-banner .section-inner { position: relative; z-index: 1; }
+    .cta-banner h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+    .cta-banner p {
+      color: rgba(255,255,255,0.7);
+      font-size: 1.05rem;
+      font-weight: 300;
+      max-width: 500px;
+      margin: 0 auto 2rem;
+    }
+    .btn-light {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 2.2rem;
+      background: #fff;
+      color: var(--color-accent);
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+    .btn-light:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+    .btn-light[style*="cursor: default"]:hover { transform: none; box-shadow: none; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--color-text);
+      color: rgba(255,255,255,0.6);
+      padding: 4rem 3rem 2rem;
+    }
+    .footer-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .footer-brand p {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      max-width: 300px;
+    }
+    .footer-logo-link { display: inline-block; }
+
+    .footer-col h5 {
+      color: #fff;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.2rem;
+      font-weight: 600;
+    }
+    .footer-col a {
+      display: block;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      font-size: 0.85rem;
+      padding: 0.3rem 0;
+      transition: color 0.25s;
+    }
+    .footer-col a:hover { color: var(--color-accent-glow); }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+    }
+    .footer-bottom a { color: rgba(255,255,255,0.4); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--color-accent-glow); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .services-grid, .client-types { grid-template-columns: 1fr 1fr; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .tech-grid { grid-template-columns: repeat(3, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .hero { padding: 7rem 1.5rem 3rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .services-grid, .client-types { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr; }
+      .step::before { display: none; }
+      .tech-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+      .firm-logos { gap: 1rem; }
+      .firm-logo-item { min-width: 100px; padding: 0.5rem 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── NAVIGATION ─── -->
+  <nav>
+    <a href="#" class="nav-logo-link">
+      <svg width="148" height="38" viewBox="0 0 148 38" xmlns="http://www.w3.org/2000/svg">
+        <!-- Icon mark: stylized order-book bars -->
+        <rect x="1" y="7" width="5.5" height="24" rx="2" fill="#0B3D2E"/>
+        <rect x="8.5" y="12" width="5.5" height="14" rx="2" fill="#1A6B4A"/>
+        <rect x="16" y="4" width="5.5" height="30" rx="2" fill="#2ED89C"/>
+        <rect x="23.5" y="9" width="5.5" height="20" rx="2" fill="#0B3D2E" opacity="0.4"/>
+        <!-- Wordmark -->
+        <text x="38" y="27" font-family="'DM Serif Display', Georgia, serif" font-size="23" fill="#0B3D2E" letter-spacing="-0.5">eTowne</text>
+        <!-- Gold accent dot -->
+        <circle cx="122" cy="25" r="3.8" fill="#C49A2A"/>
+      </svg>
+    </a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#technology">Technology</a>
+      <a href="#clients">Clients</a>
+      <a href="#contact" class="nav-cta">Get in Touch</a>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <section class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Institutional-Grade Engineering</div>
+      <h1>Financial software<br/>built for <em>precision</em></h1>
+      <p class="hero-sub">We engineer high-performance trading systems, execution engines, and bespoke financial infrastructure for firms and individuals who demand zero compromise.</p>
+
+    </div>
+  </section>
+
+  <!-- ─── TICKER ─── -->
+  <div class="ticker-strip">
+    <div class="ticker-track">
+      <span class="ticker-item">LOW-LATENCY SYSTEMS</span>
+      <span class="ticker-item">&middot;</span>
+      <span class="ticker-item">ORDER BOOK ENGINEERING</span>
+      <span class="ticker-item">&middot;</span>
+      <span class="ticker-item">ALGORITHMIC EXECUTION</span>
+      <span class="ticker-item">&middot;</span>
+      <span class="ticker-item">MULTI-VENUE CONNECTIVITY</span>
+      <span class="ticker-item">&middot;</span>
+      <span class="ticker-item">RISK MANAGEMENT INFRASTRUCTURE</span>
+      <span class="ticker-item">&middot;</span>
+      <span class="ticker-item">BESPOKE TRADING SOLUTIONS</span>
+      <span class="ticker-item">&middot;</span>
+      <span class="ticker-item">LOW-LATENCY SYSTEMS</span>
+      <span class="ticker-item">&middot;</span>
+      <span class="ticker-item">ORDER BOOK ENGINEERING</span>
+      <span class="ticker-item">&middot;</span>
+      <span class="ticker-item">ALGORITHMIC EXECUTION</span>
+      <span class="ticker-item">&middot;</span>
+      <span class="ticker-item">MULTI-VENUE CONNECTIVITY</span>
+      <span class="ticker-item">&middot;</span>
+      <span class="ticker-item">RISK MANAGEMENT INFRASTRUCTURE</span>
+      <span class="ticker-item">&middot;</span>
+      <span class="ticker-item">BESPOKE TRADING SOLUTIONS</span>
+      <span class="ticker-item">&middot;</span>
+    </div>
+  </div>
+
+  <!-- ─── ABOUT ─── -->
+  <section class="about" id="about">
+    <div class="section-inner">
+      <div class="section-label reveal">Who We Are</div>
+      <h2 class="section-heading reveal">Built by traders,<br/>engineered for traders</h2>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p>eTowne is a specialist financial software engineering firm founded by veterans from <strong>Optiver</strong>, <strong>Amber Group</strong>, <strong>Flowdesk</strong>, and <strong>JPMorgan</strong>. We bring over 25 years of aggregate experience across quantitative trading, market microstructure, and bespoke systems development.</p>
+          <p>We understand the demands of modern trading &mdash; from nanosecond-level latency requirements to complex multi-venue execution logic &mdash; because we have operated at the sharp end of these systems ourselves. Every solution we deliver is informed by real-world production experience in high-frequency and institutional environments.</p>
+          <p>Our clients range from independent algorithmic traders to mid-sized prop desks and institutional asset managers who require custom-built infrastructure that off-the-shelf products simply cannot provide.</p>
+
+          <div class="firms-strip">
+            <p>Our team's background</p>
+            <div class="firm-logos">
+
+              <span class="firm-logo-item">Optiver</span>
+              <span class="firm-logo-item">Amber Group</span>
+              <span class="firm-logo-item">Flowdesk</span>
+              <span class="firm-logo-item">JPMorgan</span>
+
+            </div>
+          </div>
+        </div>
+        <div class="about-stats reveal">
+          <div class="stat-card">
+            <div class="stat-number">25+</div>
+            <div class="stat-label">Years combined experience</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">sub-&#956;s</div>
+            <div class="stat-label">Order book latency</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">40+</div>
+            <div class="stat-label">Systems deployed</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Production support available</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SERVICES ─── -->
+  <section class="services" id="services">
+    <div class="section-inner">
+      <div class="section-label reveal">What We Build</div>
+      <h2 class="section-heading reveal">Core Services</h2>
+      <p class="section-sub reveal">End-to-end financial software engineering, from architecture to production deployment.</p>
+
+      <div class="services-grid">
+
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg width="24" height="24" fill="none" stroke="#0B3D2E" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16l4-6 4 3 5-7"/></svg>
+          </div>
+          <h3>Low-Latency Order Books</h3>
+          <p>Custom-engineered matching engines and order book systems built for microsecond-level performance. We develop and curate order books with bespoke parameters, depth configurations, and market data normalization tailored to your specific venue and asset requirements.</p>
+          <div class="service-tags">
+            <span>L2/L3 Data</span>
+            <span>FIX Protocol</span>
+            <span>Custom Matching</span>
+            <span>Tick-to-Trade</span>
+          </div>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg width="24" height="24" fill="none" stroke="#0B3D2E" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4m-3.5-6.5-2.8 2.8m-5.4 5.4-2.8 2.8m0-11.1 2.8 2.8m5.4 5.4 2.8 2.8"/></svg>
+          </div>
+          <h3>Trading Agents</h3>
+          <p>Intelligent execution agents that operate on real-time market sentiment analysis and technical indicators. Our agents support configurable strategy logic, multi-asset execution, and adaptive risk parameters &mdash; from simple signal-based automation to complex multi-leg strategies.</p>
+          <div class="service-tags">
+            <span>Sentiment Analysis</span>
+            <span>Technical Indicators</span>
+            <span>Multi-Asset</span>
+            <span>Adaptive Risk</span>
+          </div>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg width="24" height="24" fill="none" stroke="#0B3D2E" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          </div>
+          <h3>Account Infrastructure</h3>
+          <p>Multi-layered account backend systems with granular, customizable admin permission hierarchies. Designed for trading teams and fund operations that require segregated access controls, audit trails, and compliance-ready reporting across multiple trading entities.</p>
+          <div class="service-tags">
+            <span>RBAC</span>
+            <span>Audit Logging</span>
+            <span>Multi-Entity</span>
+            <span>Compliance</span>
+          </div>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg width="24" height="24" fill="none" stroke="#0B3D2E" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg>
+          </div>
+          <h3>Arbitrage Systems</h3>
+          <p>Cross-venue and cross-asset arbitrage infrastructure with automated position management, real-time PnL tracking, and configurable spread thresholds. Engineered for speed, with built-in safeguards for inventory limits and exposure management.</p>
+          <div class="service-tags">
+            <span>Multi-Venue</span>
+            <span>Spread Engine</span>
+            <span>Inventory Mgmt</span>
+            <span>Real-Time PnL</span>
+          </div>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg width="24" height="24" fill="none" stroke="#0B3D2E" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>Risk &amp; Compliance Tooling</h3>
+          <p>Pre-trade and post-trade risk management systems including real-time exposure monitoring, configurable circuit breakers, kill-switch infrastructure, and regulatory reporting modules built to meet institutional standards.</p>
+          <div class="service-tags">
+            <span>Pre-Trade Checks</span>
+            <span>Circuit Breakers</span>
+            <span>Kill-Switch</span>
+            <span>Reporting</span>
+          </div>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg width="24" height="24" fill="none" stroke="#0B3D2E" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <h3>Connectivity &amp; Integration</h3>
+          <p>Venue connectivity layers, API gateway development, and protocol adapters for FIX, WebSocket, REST, and proprietary exchange interfaces. We build the plumbing that connects your strategies to the market with minimal overhead.</p>
+          <div class="service-tags">
+            <span>FIX 4.2/4.4</span>
+            <span>WebSocket</span>
+            <span>REST APIs</span>
+            <span>Co-Location</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PROCESS ─── -->
+  <section class="process" id="process">
+    <div class="section-inner">
+      <div class="section-label reveal">How We Work</div>
+      <h2 class="section-heading reveal">Engagement Process</h2>
+      <p class="section-sub reveal">A structured approach to delivering bespoke financial systems on time and to specification.</p>
+
+      <div class="process-steps">
+        <div class="step reveal">
+          <div class="step-num">01</div>
+          <h4>Discovery &amp; Scoping</h4>
+          <p>Deep-dive technical consultation to understand your trading workflow, latency requirements, venue connectivity, and operational constraints.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">02</div>
+          <h4>Architecture &amp; Design</h4>
+          <p>System architecture document, component specifications, and technology selection. Reviewed collaboratively with your team before any code is written.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">03</div>
+          <h4>Build &amp; Iterate</h4>
+          <p>Agile development with bi-weekly demos. Continuous integration, performance benchmarking, and incremental delivery of working components.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">04</div>
+          <h4>Deploy &amp; Support</h4>
+          <p>Production deployment, load testing, monitoring setup, and handover documentation. Optional ongoing maintenance and 24/7 support retainers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TECHNOLOGY ─── -->
+  <section class="technology" id="technology">
+    <div class="section-inner">
+      <div class="section-label reveal">Our Stack</div>
+      <h2 class="section-heading reveal">Technology</h2>
+      <p class="section-sub reveal">We choose the right tool for the problem &mdash; performance-critical paths in low-level systems languages, orchestration layers in modern frameworks.</p>
+
+      <div class="tech-grid reveal">
+        <div class="tech-item">
+          <div class="tech-name">C++</div>
+          <div class="tech-desc">Core matching engines</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-name">Rust</div>
+          <div class="tech-desc">Low-latency services</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-name">Python</div>
+          <div class="tech-desc">Strategy &amp; analytics</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-name">Go</div>
+          <div class="tech-desc">Microservices</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-name">Kafka</div>
+          <div class="tech-desc">Event streaming</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-name">Redis</div>
+          <div class="tech-desc">In-memory cache</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-name">PostgreSQL</div>
+          <div class="tech-desc">Transactional data</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-name">Kubernetes</div>
+          <div class="tech-desc">Orchestration</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CLIENTS ─── -->
+  <section class="clients" id="clients">
+    <div class="section-inner">
+      <div class="section-label reveal">Who We Serve</div>
+      <h2 class="section-heading reveal">Client Profiles</h2>
+      <p class="section-sub reveal">Tailored engagement models for different trading operations and scale requirements.</p>
+
+      <div class="client-types">
+        <div class="client-card reveal">
+          <h4>Individual Traders</h4>
+          <p>Bespoke tools and execution infrastructure for algorithmic traders and quantitative researchers operating independently.</p>
+          <ul>
+            <li>Custom bot development</li>
+            <li>Strategy backtesting frameworks</li>
+            <li>Personal trading dashboards</li>
+            <li>Single-venue or multi-venue setups</li>
+          </ul>
+        </div>
+        <div class="client-card reveal">
+          <h4>Trading Teams &amp; Prop Desks</h4>
+          <p>Scalable systems for teams that require shared infrastructure, risk controls, and collaborative tooling.</p>
+          <ul>
+            <li>Multi-user account hierarchies</li>
+            <li>Shared strategy libraries</li>
+            <li>Team risk management layers</li>
+            <li>Internal reporting &amp; analytics</li>
+          </ul>
+        </div>
+        <div class="client-card reveal">
+          <h4>Financial Institutions</h4>
+          <p>Enterprise-grade solutions for funds, market makers, and brokerages with complex operational and compliance requirements.</p>
+          <ul>
+            <li>Full execution management systems</li>
+            <li>Regulatory compliance modules</li>
+            <li>Multi-entity segregation</li>
+            <li>SLA-backed production support</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CTA ─── -->
+  <section class="cta-banner" id="contact">
+    <div class="section-inner">
+      <h2 class="reveal">Let's build your edge</h2>
+      <p class="reveal">Whether you're an independent trader or a trading floor, we'd like to hear about what you're building.</p>
+      <span class="btn-light reveal" style="cursor: default;">admin@etowne.xyz</span>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="footer-logo-link">
+          <svg width="130" height="32" viewBox="0 0 148 38" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1" y="7" width="5.5" height="24" rx="2" fill="#FFFFFF"/>
+            <rect x="8.5" y="12" width="5.5" height="14" rx="2" fill="#1A6B4A"/>
+            <rect x="16" y="4" width="5.5" height="30" rx="2" fill="#2ED89C"/>
+            <rect x="23.5" y="9" width="5.5" height="20" rx="2" fill="rgba(255,255,255,0.3)"/>
+            <text x="38" y="27" font-family="'DM Serif Display', Georgia, serif" font-size="23" fill="#FFFFFF" letter-spacing="-0.5">eTowne</text>
+            <circle cx="122" cy="25" r="3.8" fill="#C49A2A"/>
+          </svg>
+        </a>
+        <p>Precision financial software engineering. Built by traders, for traders.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <a href="#services">Order Book Systems</a>
+        <a href="#services">Trading Agents</a>
+        <a href="#services">Account Infrastructure</a>
+        <a href="#services">Arbitrage Systems</a>
+        <a href="#services">Risk Tooling</a>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="#about">About</a>
+        <a href="#process">Process</a>
+        <a href="#technology">Technology</a>
+        <a href="#clients">Clients</a>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <a href="mailto:admin@etowne.xyz">admin@etowne.xyz</a>
+        <a href="#contact">Schedule Consultation</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 eTowne. All rights reserved.</span>
+      <div>
+        <a href="#">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── SCROLL REVEAL ─── -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
